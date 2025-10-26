@@ -1,0 +1,191 @@
+﻿1) Create ASP.NET MVC Web Application 
+2) Install Entity Framework via NuGet Package Manager
+3) Install SQL Server via NuGet Package Manager
+4) Install Tools for Entity Framework via NuGet Package Manager
+
+5) Create Model Category
+6) Create Model Transaction
+
+7) Create a ApplicationDbContext class in Models Folders and Keep the Models that needs to be created in Database.
+
+8) Open Program.cs and add Dependency Injection
+
+9) Inside appsettings.json , add connection string using DevConnection, keep that DevConnection in 8th line 
+
+10) Build the Project
+
+11) Open Package Manager Console
+
+12) Add Migration
+    Add-Migration "Initial Create"
+
+13) Update-Database
+    Database will be creating in Microsoft SQL Server Management Studio 
+
+14) Create Controllers for Category 
+
+15) Sync Fusion Package Installation
+    Install-Package Syncfusion.EJ2.AspNet.Core -Version
+
+    (https://ej2.syncfusion.com/aspnetcore/documentation/introduction?_gl=1*cr900p*_gcl_au*MTMxNDU4NjA0MC4xNzU3OTU3NzUy*_ga*MTc4NzIxODg4MS4xNzU3OTU3NzUz*_ga_41J4HFMX1J*czE3NTc5NTc3NTIkbzEkZzEkdDE3NTc5NTc3OTUkajUyJGwwJGgw)
+    Website Link for Syncfusion
+
+16) Add syncfusion line in ViewImports.cshtml
+
+17) Add in Layout.cshtml above site.css line in header , before head tag and script tag at last before body tag
+
+18) MVC uses bootstrap generally.
+
+19) Replace the Normal Text Box with Sync Fusion textBox in Create View of Category
+                <ejs-textbox id="title" placeholder="Title" value="Title"></ejs-textbox>
+                <span asp-validation-for="Title" class="text-danger"></span>
+
+
+20) Comment in _layout.cshtml
+
+21) We are using Bootstrap dark from appearance in Syncfusion
+https://cdn.syncfusion.com/ej2/31.1.17/bootstrap5-dark.css
+
+22) Open the Site.css
+    Add css Properties
+
+23) Set floatLabelType="Always" in Create.cshtml , @Model.Title
+
+24) In CategoryController -> new Category()
+
+25) In Site.cs add size mode
+
+26) In create.cshtml change all to ejs-for , mb-3
+
+27) Generate License Key from Syncfusion Website
+Ngo9BigBOggjGyl/Vkd+XU9FcVRDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS3tTf0dnWX1edHZQRmBVUU91Xg==
+
+28) In Program.cs add Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("License Key");
+
+// Warning Disappears in the Page - 36min
+
+29) Use Button Group Code from Documentation in createcs.html
+
+30) Customize a control add custom css and add its code in site.css
+    Layout changes
+
+31) Then submit any by using https://emojipedia.org/, it will get inserted into SQL Table
+
+32) In Category.Controller remove get and post of the Edit Action Method 
+    Removed Get and Post Action Methods of Edit  and Modified the Create -> AddOrEdit
+
+33) Delete Edit.cshtml , rename create.cshtml to AddOrEdit.cshtml
+
+34) Change  in Index.cshtml , in the Edit Action Method to AddOrEdit
+
+35) Modify the code Get Method of AddOrEdit Action Method in CategoryController
+  Now the Edit url looks like http://localhost:5189/Category/AddOrEdit/3 with 3 as Id
+
+36) Modify form in AddOrEdit.cshtml
+    Hidden Line
+    Modify Button to Sync Fusion Button
+    Remove Extra headings
+
+37) Modify in _layout.cshtml and add padding in addoredit.cshtml
+
+38) Now inside site.css add custom css for widget
+
+39) Inside layput.cshtm add 
+    Used fone awesome cdn
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+40) Now Inside the addoredit,cshtml , do changes 
+    https://fontawesome.com/search?q=shapes&o=r
+
+41) Now Replace HTML Table with Sync Fusion Grid
+    Delete Table from Index.cshtml present in Category
+
+42) Inside Category class , add new field TitleWithIcon and keep it in index.cshtml
+
+43) add the column template script
+
+44) If want to change font add using google fonts.
+
+45) Sorting, Paging , and PageSize, width for type and actions , template for actionColumnTemplate
+
+46) for pencil symbol highlighting add in the site.css (Button,Hyperlink)
+
+47) Remove Get Delete from the Controller, Remove delete.cshtml , remove details.cshtml
+
+49) Change favicon
+
+Time : 1:08:11
+---------
+
+50) BreadCrumb and Adding button and Page Titles with ViewData
+
+51) Creating a Transaction Controller - 1:13:44
+
+52) Replace Transaction form with Sync Fusion Form
+
+53) Validations
+
+Time : 1:42:00 
+----------
+
+54) Dashboard
+
+Create a Dashboard Controller 
+MVC Controller Empty
+
+55) Make DashBoard Controller as the default Controller
+
+56) Add summary widgets in Index.cshtml (income,expense,balance)
+    Use SyncFusion Component Side Bar
+
+
+Time : 1.54.00
+
+------------
+
+57) Go to Charts in SyncFusion ( As I am not logging in I am using the presented code in github)
+Accumulation
+    Doughnut and Spline Chart*
+
+58) Inside the dashboard controller add the donutchart
+
+Time : 2:03:26
+
+------------
+
+59) Spline Chart 
+    By using same ejs property we write code for spline chart
+
+
+Spline Chart Successfully added 
+
+Time : 2.18.00
+
+--------------
+
+60) Recent Transaction Widget 
+
+Inside the Index.cshtml add the html code for recent transaction widget
+
+61) Inside the Dashboard Controller, add the Recent Transaction code.
+
+
+--------------
+
+62) Update the NavBar 
+Go to getbootstrap.com
+
+----------------
+
+63) Side Menu with Side Bar
+2.23.0
+
+using syncfusion component called menu 
+(_sidebar.cshtml)
+-> add domcontentload for open and close
+
+
+----------------
+
+
+
