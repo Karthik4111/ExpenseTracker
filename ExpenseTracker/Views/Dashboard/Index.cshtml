@@ -8,10 +8,8 @@
     var endDateValue = (ViewBag.EndDate as string) ?? "";
 }
 
-
-@* Range selector: 1 week, 1 month, 3 months, 6 months, 1 year *@
 <div class="row mb-3">
-    <div class="col-md-8">
+    <div class="col-md-8 d-flex align-items-center">
         <div class="btn-group" role="group" aria-label="Range selector">
             <a class="btn btn-outline-light @(selectedRange == "week" ? "active" : "")"
                href="@Url.Action("Index", "Dashboard", new { range = "week" })" title="Last 1 week">1W</a>
@@ -24,21 +22,26 @@
             <a class="btn btn-outline-light @(selectedRange == "year" ? "active" : "")"
                href="@Url.Action("Index", "Dashboard", new { range = "year" })" title="Last 1 year">1Y</a>
         </div>
+
+        @* Save-As Export PDF button: uses File System Access API with a download fallback *@
+        <button id="exportPdfBtn" type="button" class="btn btn-sm btn-success ms-3"
+                title="Export report for the selected range">
+            <i class="fa-solid fa-file-pdf me-1"></i> Save As...
+        </button>
     </div>
 
     @* Custom date range inputs (GET form) *@
     <div class="col-md-4">
         <form class="d-flex justify-content-end" method="get" action="@Url.Action("Index", "Dashboard")">
             <div class="input-group">
-                <input class="form-control form-control-sm" type="date" name="startDate" value="@startDateValue" />
-                <input class="form-control form-control-sm" type="date" name="endDate" value="@endDateValue" />
+                <input id="startDateInput" class="form-control form-control-sm" type="date" name="startDate" value="@startDateValue" />
+                <input id="endDateInput" class="form-control form-control-sm" type="date" name="endDate" value="@endDateValue" />
                 <button class="btn btn-sm btn-primary" type="submit">Apply</button>
                 <a class="btn btn-sm btn-outline-light" href="@Url.Action("Index", "Dashboard", new { range = "week" })" title="Reset">Reset</a>
             </div>
         </form>
     </div>
 </div>
-
 
 @*Summary Widgets*@
 <div class="row mb-4">
@@ -167,3 +170,67 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Called when user clicks "Save As..." to let them pick a save location
+        async function savePdfForSelection(range, startDate, endDate) {
+            try {
+                const params = new URLSearchParams();
+                if (range) params.set('range', range);
+                if (startDate) params.set('startDate', startDate);
+                if (endDate) params.set('endDate', endDate);
+
+                const url = '/Report/GeneratePdf?' + params.toString();
+                const resp = await fetch(url, { credentials: 'same-origin' });
+                if (!resp.ok) {
+                    alert('Failed to generate PDF: ' + resp.statusText);
+                    return;
+                }
+
+                const blob = await resp.blob();
+                const now = new Date();
+                const fileNameParts = ['ExpenseReport', range || 'custom'];
+                if (startDate) fileNameParts.push(startDate);
+                if (endDate) fileNameParts.push(endDate);
+                const suggestedName = fileNameParts.join('_') + '.pdf';
+
+                // File System Access API (Chromium-based browsers)
+                if (window.showSaveFilePicker) {
+                    const opts = {
+                        suggestedName,
+                        types: [{
+                            description: 'PDF Document',
+                            accept: { 'application/pdf': ['.pdf'] }
+                        }]
+                    };
+                    const handle = await window.showSaveFilePicker(opts);
+                    const writable = await handle.createWritable();
+                    await writable.write(blob);
+                    await writable.close();
+                } else {
+                    // Fallback: create an object URL and use anchor download - respects user's browser download settings
+                    const link = document.createElement('a');
+                    const urlObj = URL.createObjectURL(blob);
+                    link.href = urlObj;
+                    link.download = suggestedName;
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    setTimeout(() => URL.revokeObjectURL(urlObj), 1000);
+                }
+            } catch (ex) {
+                console.error(ex);
+                alert('Error saving PDF: ' + (ex.message || ex));
+            }
+        }
+
+        document.getElementById('exportPdfBtn').addEventListener('click', function () {
+            const range = '@selectedRange';
+            // prefer inputs (custom dates) if present
+            const startDate = document.getElementById('startDateInput').value || '';
+            const endDate = document.getElementById('endDateInput').value || '';
+            savePdfForSelection(range, startDate, endDate);
+        });
+    </script>
+}
