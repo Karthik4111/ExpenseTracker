@@ -10,23 +10,22 @@ pipeline {
 
         stage('Restore') {
             steps {
-                sh 'dotnet restore'
+                bat 'dotnet restore'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'dotnet build --configuration Release --no-restore'
+                bat 'dotnet build -c Release'
             }
         }
-    }
 
-    post {
-        success {
-            echo 'ASP.NET Web API build successful'
-        }
-        failure {
-            echo 'Build failed'
+        stage('Publish') {
+            steps {
+                bat '''
+                dotnet publish -c Release -o "C:\\Users\\karth\\OneDrive\\Desktop\\Goal\\24_Jenkins\\JenkinsDeploy\\ExpenseTracker"
+                '''
+            }
         }
     }
 }
