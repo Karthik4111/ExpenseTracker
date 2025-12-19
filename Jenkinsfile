@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -10,22 +11,29 @@ pipeline {
 
         stage('Restore') {
             steps {
-                bat 'dotnet restore'
+                sh 'dotnet restore'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'dotnet build -c Release'
+                sh 'dotnet build --configuration Release --no-restore'
             }
         }
 
         stage('Publish') {
             steps {
-                bat '''
-                dotnet publish -c Release -o "C:\\Users\\karth\\OneDrive\\Desktop\\Goal\\24_Jenkins\\JenkinsDeploy\\ExpenseTracker"
-                '''
+                sh 'dotnet publish -c Release -o publish'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build & Publish successful'
+        }
+        failure {
+            echo 'Build failed'
         }
     }
 }
